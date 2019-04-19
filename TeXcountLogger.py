@@ -10,6 +10,7 @@ import os
 import sys
 import argparse
 import subprocess
+import csv
 from datetime import date
 
 
@@ -19,13 +20,13 @@ def main(arguments):
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('file', help="The tex file which you want to log", type=argparse.FileType('r'))
-    parser.add_argument('-l', '--logfile', help="The file name of the output csv",
-                        default=sys.stdout, type=argparse.FileType('w'))
+    # parser.add_argument('-l', '--logfile', help="The file name of the output csv",
+    #                     default=sys.stdout, type=argparse.FileType('w'))
 
     args = parser.parse_args(arguments)
 
     try:
-        texcount = subprocess.run(['texcount', args.file.name], capture_output=True)
+        texcount = subprocess.run(['texcount -inc', args.file.name], capture_output=True)
 
     except FileNotFoundError:
         print('Please install texcount.')
@@ -36,8 +37,13 @@ def main(arguments):
     print(count[0])  # Print file that is being counted
 
     totalwords = [x for x in count if not x.find('Words in text: ')][0].split()[3]
-    print('Total words:', totalwords)
-    print('Today\'s date: ', date.today())
+    print('Date \t \t Wordcount')
+    print(date.today(), '\t', totalwords)
+    
+    # Write to file
+    with open(r'TeXcountLog', 'a') as log:
+        writer = csv.writer(log)
+        writer.writerow([date.today(), totalwords])
     
 
 if __name__ == '__main__':
