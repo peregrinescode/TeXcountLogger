@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#coding:utf-8
+# coding:utf-8
 """
   Author:  ross warren <ross.warren@pm.me>
   Purpose: A python script which logs latex word count in csv
@@ -36,15 +36,15 @@ def main(arguments):
 
     print(count[0])  # Print file that is being counted
 
-    totalwords = [x for x in count if not x.find('Words in text: ')][0].split()[3]
+    totalwords = [x for x in count if not x.find('Words in text: ')][-1].split()[3]
     print('Date \t \t Wordcount')
     print(date.today(), '\t', totalwords)
-    
+
     # Write to file
     with open(r'TeXcountLog', 'a') as log:
         writer = csv.writer(log)
         writer.writerow([date.today(), totalwords])
-    
+
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
