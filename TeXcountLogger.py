@@ -26,7 +26,7 @@ def main(arguments):
     args = parser.parse_args(arguments)
 
     try:
-        texcount = subprocess.run(['texcount -inc', args.file.name], capture_output=True)
+        texcount = subprocess.run(['texcount', '-inc', args.file.name], capture_output=True)
 
     except FileNotFoundError:
         print('Please install texcount.')
