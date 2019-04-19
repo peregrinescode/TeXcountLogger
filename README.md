@@ -10,4 +10,3 @@ Run daily from the command line:
 ## Requirements:
   * python3
   * texcount
-  * 
