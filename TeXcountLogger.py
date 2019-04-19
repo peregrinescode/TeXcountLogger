@@ -36,15 +36,33 @@ def main(arguments):
 
     print(count[0])  # Print file that is being counted
 
+    countlog = []  # list for storing all counts
+
     totalwords = [x for x in count if not x.find('Words in text: ')][-1].split()[3]
-    print('Date \t \t Wordcount')
-    print(date.today(), '\t', totalwords)
+
+    countlog.append(['Total', totalwords])
+
+    # Word count for chapters
+    sections = [x for x in count if not x.find('Included file: ')]
+
+    for sec in sections:
+        part = sec.split('/')[-1]
+        wordcount = count[count.index(sec) + 2].split()[-1]
+        countlog.append([part, wordcount])
 
     # Write to file
     with open(r'TeXcountLog', 'a') as log:
         writer = csv.writer(log)
         writer.writerow([date.today(), totalwords])
 
+    # Print to terminal
+    dash = '-' * 40  # for nice print output
+    print('Todays date:', date.today())
+    print(dash)
+    print('{:<20s}{:>20s}'.format('Part', 'Words'))
+    print(dash)
+    for counts in countlog:
+        print('{:<20s}{:>20s}'.format(counts[0], counts[1]))
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
